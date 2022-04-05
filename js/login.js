@@ -2,6 +2,8 @@
 переходе на страницу по ссылке или кнопкой назад тоже 
 происходил выход из аккаунта*/
 
+
+//Отправка данных из формы входа
 document.addEventListener('DOMContentLoaded', function(){
 	const log = document.getElementById('log')
 	log.addEventListener('submit', async function(e){
@@ -19,11 +21,13 @@ document.addEventListener('DOMContentLoaded', function(){
 				pass: pass
 			})
 		})
+		//вход если в БД была найдена запись с такими данными
 		if (response.ok) {
 			let result = await response.json()
 			 if (result['status']) {
 			 	alert(result['status'])
 			 }
+			 //возврат к странице входа, если не найдено записи в БД с такими данными
 			 if (!result['status']) {
 			 	get = "user_id=" + result['user_id']
 			 	document.location.replace(`./index.html?${get}`);

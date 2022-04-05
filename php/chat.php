@@ -1,6 +1,7 @@
 <?php 
 	session_start();
 
+	//Отправка флага для выхода из аккаунта при отсутствии данных о пользователя в массиве $_SESSION
 	if (!$_SESSION) {
 		echo json_encode("unlog");
 	}
@@ -9,7 +10,7 @@
 		require_once('./auth.php');
 
 		$user_id = $input['user_id'];
-
+		//Запрос списка пользователей из БД
 		$query = "SELECT user_id, name FROM users;
 				SELECT name, pass FROM users WHERE user_id = {$user_id}";
 		$result = mysqli_multi_query($con, $query);
@@ -26,6 +27,7 @@
 		$bdname = $arr[1][0][0];
 		$bdpass = $arr[1][0][1];
 
+		//Отправка списка пользователей или флага для выхода из аккаунта
 		if ($logname==$bdname && $logpass==$bdpass) {
 			echo json_encode($arr[0]);
 		}else{

@@ -1,3 +1,5 @@
+//Отправка данных из формы регистрации в БД
+
 document.addEventListener('DOMContentLoaded', function(){
 	const reg = document.getElementById('reg')
 	reg.addEventListener('submit', async function(e){
@@ -7,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function(){
 		name = reg.name.value
 		pass = reg.password.value
 		confirmPass = reg.confirmPass.value
+
+		//проверка подтверждения пароля
 		if (pass == confirmPass) {
 			let response = await fetch('./php/reg.php', {
 				method: 'POST',
@@ -19,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function(){
 				let result = await response.json()
 				
 				switch (result){
-					case (1062):
+					case (1054):
 						alert("Пользователь с таким именем уже существует")
 					break
 
