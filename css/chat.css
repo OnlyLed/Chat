@@ -1,0 +1,151 @@
+body{
+	background-color: #252b40;
+}
+.content{
+	box-shadow: 0px 0px 30px 10px #707a99;
+	border-radius: 15px;
+	height: 100vh;
+	margin: auto;
+	max-width: 1000px;
+	display: grid;
+	align-content: start;
+	grid-template-columns: minmax(100px, 1fr) 4fr;
+	grid-template-rows: minmax(50px, auto) 1fr minmax(100px, auto);
+	grid-template-areas: 	"controls controls" 
+							"users messages" 
+							"input input";
+}
+.controls{
+	grid-area: controls;
+	display: flex;
+	justify-content: space-between;
+	border-bottom: 1px black solid;
+	background-color: #404966;
+	border-radius: 15px 15px 0px 0px;
+	overflow: hidden;
+}
+.userName{
+	margin: 5px 0 5px 15px;
+	color: lightblue;
+	font-size: 30px;
+}
+.exit{
+	background-color: #707a99;
+	border-top-right-radius: 8px;
+	text-shadow: 0 0 15px white;
+	padding: 10px;
+	margin: 5px;
+	font-weight: bold;
+}
+.exit:hover{
+	background-color: lightblue;
+	cursor: pointer;
+}
+.exit:active{
+	background-color: lightgreen;
+}
+.users{
+	grid-area: users;
+	overflow-y: auto;
+	border-right: 1px black solid;
+	padding: 5px;
+	background-color: #404966;
+}
+.user{
+	border-radius: 15px;
+	margin-bottom: 5px;
+	word-wrap: break-word;
+	padding: 5px 10px 5px 10px;
+	background-color: lightblue;
+}
+.user:hover{
+	background-color: lightgreen;
+}
+.user:active{
+	background-color: #60b560;
+}
+.messages{
+	display: flex;
+	flex-direction: column;
+	grid-area: messages;
+	overflow-y: auto;
+	background-color: #252b40;
+}
+.wrapper{
+	margin: 5px;
+	padding: 0 10px 0 10px;
+	min-width: 30%;
+	max-width: 80%;
+	grid-template-rows: auto auto auto;
+	border-radius: 15px;
+}
+.left{
+	align-self: flex-start;
+	background-color: lightgreen;
+}
+.right{	
+	align-self: flex-end;
+	background-color: lightblue;
+}
+.name{
+	grid-area: name;
+	word-break: break-word;
+	color: grey;
+}
+.messageContent{
+	grid-area: messageContent;
+	word-break: break-word;
+}
+.date{
+	grid-area: date;
+	text-align: right;
+	word-break: break-word;
+	color: grey;
+}
+.input{
+	grid-area: input;
+	display: flex;
+	border-top: 1px black solid;
+	background-color: #404966;
+	border-radius: 0 0 15px 15px;
+}
+.text{
+	border: 1px black solid;
+	border-radius: 15px;
+	margin: 5px;
+	padding: 5px 10px 0 10px;
+	flex: 1 1 auto;
+	word-break: break-word;
+	height: auto;
+	border-right: 1px black solid;
+	background-color: #707a99;
+	overflow-y: auto;
+}
+.send{
+	flex: 0 0 100px;
+}
+.active{
+	background-color: lightgreen;
+}
+svg:hover polygon{
+	fill: lightgreen;
+}
+svg:active polygon{
+	fill: #60b560;
+}
+.user:hover, .send:hover{
+	cursor: pointer;
+}
+::-webkit-scrollbar{
+	width: 10px;
+}
+::-webkit-scrollbar-track{
+	background-color: #707a99;
+}
+::-webkit-scrollbar-thumb{
+	background-color: #404966;
+	border-radius: 8px;
+}
+*:focus-visible{
+	outline: lightgreen solid 2px;
+}
