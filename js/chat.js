@@ -1,6 +1,7 @@
 let chat_id
 let user1_name
 let last_message
+let temporary
 
 //извлекаем get параметры
 const get = new Object
@@ -106,7 +107,7 @@ document.addEventListener('DOMContentLoaded', async function(){
 		}
 	})
 
-
+	
 
 	//фокус на поле ввода при нажатии клавиши
 	document.addEventListener('keydown', function(){
@@ -115,11 +116,13 @@ document.addEventListener('DOMContentLoaded', async function(){
 
 
 	//Отправка сообщения по нажатию на Enter
-	document.addEventListener('keydown', function(){
+	document.addEventListener('keydown', function(e){
 		if (event.code == 'Enter') {
+			e.preventDefault()
 			postMessage()
 		}
 	})
+
 
 
 	//Отправка сообщения
@@ -145,11 +148,16 @@ document.addEventListener('DOMContentLoaded', async function(){
 //Функция для добавления новых сообщений из БД
 function addMessages(m){
 	if (m) {
+
 		a = scrollCheck()
+		
 		m.forEach(function(n){
 			if (n[0] == user1_id) {
 				let messageHistory	= `<div class="wrapper left"><div class="name">${user1_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div></div>`
 				document.getElementById('messages').innerHTML += messageHistory
+				if (document.getElementsByClassName('temporary')[0]) {
+						document.getElementsByClassName('temporary')[0].remove()
+				}
 			} else
 			if (n[0] == user2_id) {
 				let messageHistory	= `<div class="wrapper right"><div class="name">${user2_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div></div>`
@@ -171,13 +179,22 @@ function unlog(){
 //Функция для отправки сообщения в БД
 async function postMessage(){
 	messageInput = document.getElementById('message').innerHTML
+	messageInput = messageInput.split('&nbsp; ').join('')
+	messageInput = messageInput.split('&nbsp;').join('')
 
-	//выводим сообщение, если поле ввода заполнено
+	//формируем дату отправки сообщения
 	if (messageInput) {
 		date = new Date
 		formatDate = date.toISOString().slice(0,19).replace('T', ' ')
 		
 		document.getElementById('message').innerHTML = ""
+
+
+		a = scrollCheck()
+		let messageTemporary = `<div class="wrapper left temporary"><div class="name">${user1_name}</div><div class="messageContent" >${messageInput}</div><div class="date">${formatDate}</div></div>`
+				document.getElementById('messages').innerHTML += messageTemporary
+		scrollDown(a)
+
 
 		//отправить в базу данных
 		let response = await fetch( "./php/newMessage.php",{
