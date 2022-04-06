@@ -2,6 +2,8 @@ let chat_id
 let user1_name
 let last_message
 let temporary
+let shift
+let enter
 
 //извлекаем get параметры
 const get = new Object
@@ -107,19 +109,41 @@ document.addEventListener('DOMContentLoaded', async function(){
 		}
 	})
 
-	
 
-	//фокус на поле ввода при нажатии клавиши
-	document.addEventListener('keydown', function(){
+
+
+	
+	document.addEventListener('keydown', function(e){
+		
+		if(event.key == 'Enter'){
+			e.preventDefault()
+			enter = true
+		}
+		if(event.key == 'Shift'){
+			shift = true
+		}
+
+
+		//Новый абзац при нажатии shift+enter
+		if(shift && enter){
+			enter = false
+		}
+
+		//Отправка сообщения по нажатию на Enter
+		if(enter){
+			postMessage()
+		}
 		document.getElementById('message').focus()
 	})
 
+	//сброс значений при отпускании клавишь
+	document.addEventListener('keyup', function(){
 
-	//Отправка сообщения по нажатию на Enter
-	document.addEventListener('keydown', function(e){
-		if (event.code == 'Enter') {
-			e.preventDefault()
-			postMessage()
+		if (event.key == 'Enter'){
+			enter = false
+		}
+		if(event.key == 'Shift'){
+			shift = false
 		}
 	})
 
@@ -152,17 +176,23 @@ function addMessages(m){
 		a = scrollCheck()
 		
 		m.forEach(function(n){
+			let messageHistory	= document.createElement('div')
 			if (n[0] == user1_id) {
-				let messageHistory	= `<div class="wrapper left"><div class="name">${user1_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div></div>`
-				document.getElementById('messages').innerHTML += messageHistory
+				messageHistory.classList = 'wrapper left'
+				messageHistory.innerHTML = `<div class="name">${user1_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div>`
+				document.getElementById('messages').append(messageHistory)
+
+				//удаление временного блока с сообщением
 				if (document.getElementsByClassName('temporary')[0]) {
 						document.getElementsByClassName('temporary')[0].remove()
 				}
 			} else
 			if (n[0] == user2_id) {
-				let messageHistory	= `<div class="wrapper right"><div class="name">${user2_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div></div>`
-				document.getElementById('messages').innerHTML += messageHistory
+				messageHistory.classList = 'wrapper right'
+				messageHistory.innerHTML = `<div class="name">${user1_name}</div><div class="messageContent" >${n[1]}</div><div class="date">${n[2]}</div>`
+				document.getElementById('messages').append(messageHistory)
 			}
+			//сохраняем id последенго сообщения чтобы в следующий раз запрашивать из БД только более позднии сообщения
 			last_message = n[3]
 		})
 		scrollDown(a)
@@ -191,8 +221,13 @@ async function postMessage(){
 
 
 		a = scrollCheck()
-		let messageTemporary = `<div class="wrapper left temporary"><div class="name">${user1_name}</div><div class="messageContent" >${messageInput}</div><div class="date">${formatDate}</div></div>`
-				document.getElementById('messages').innerHTML += messageTemporary
+
+		//добавляем временный блок с сообщением
+		let messageHistory	= document.createElement('div')
+		messageHistory.classList = 'wrapper left temporary'
+		messageHistory.innerHTML = `<div class="name">${user1_name}</div><div class="messageContent" >${messageInput}</div><div class="date">${formatDate}</div>`
+		document.getElementById('messages').append(messageHistory)
+
 		scrollDown(a)
 
 
@@ -203,8 +238,7 @@ async function postMessage(){
 			body: JSON.stringify({
 				chat_id: chat_id,
 				user_id: user1_id,
-				content: "'"+messageInput+"'",
-				date: "'"+formatDate+"'"
+				content: "'"+messageInput+"'"
 			})
 		})
 
