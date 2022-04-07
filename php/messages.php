@@ -8,7 +8,7 @@
 	//Запрос имен обоих участников чата и id чата
 	$query = "SELECT name FROM users WHERE user_id = {$user1_id};
 			SELECT name FROM users WHERE user_id = {$user2_id};
-			SELECT chat_id FROM private WHERE user1_id = {$user1_id} AND user2_id = {$user2_id} OR user1_id = {$user2_id} AND user2_id = {$user1_id}";
+			SELECT chat_id FROM private WHERE (user1_id = {$user1_id} AND user2_id = {$user2_id}) OR (user1_id = {$user2_id} AND user2_id = {$user1_id})";
 
 	$result = mysqli_multi_query($con, $query);
 	do {
@@ -26,8 +26,8 @@
 	}
 
 	if ($chat_id) {
-		//вывести предыдущие сообщения из бд
-		$query = "SELECT user_id, content, date, message_id FROM messages WHERE chat_id ={$chat_id}" ;
+		//вывести 50 последних сообщений из бд
+		$query = "SELECT * FROM(SELECT user_id, content, date, message_id FROM messages WHERE chat_id ={$chat_id} ORDER BY message_id DESC LIMIT 50) t ORDER BY message_id";
 		$result = mysqli_query($con, $query);
 		$messages = mysqli_fetch_all($result);
 
@@ -46,5 +46,4 @@
 	}
 	
 	echo json_encode($arr);
-
 ?>

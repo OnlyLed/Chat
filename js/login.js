@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function(){
 		pass = log.pass.value
 		
 
-		let response = await fetch('./php/log.php' ,{
+		let response = await fetch('./php/login.php' ,{
 			method: 'POST',
 			body: JSON.stringify({
 				name: name,
